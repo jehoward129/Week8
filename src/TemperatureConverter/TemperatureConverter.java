@@ -55,6 +55,11 @@ public class TemperatureConverter extends javax.swing.JFrame {
         btnFromFahrenheit.setText("Fahrenheit");
 
         btnFromCelcius.setText("Celcius");
+        btnFromCelcius.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                btnFromCelciusStateChanged(evt);
+            }
+        });
 
         btnFromKelvin.setText("Kelvin");
 
@@ -75,10 +80,17 @@ public class TemperatureConverter extends javax.swing.JFrame {
         lblOut.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         tfInTemp.setText("0");
-        tfInTemp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tfInTempKeyPressed(evt);
+        tfInTemp.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                tfInTempCaretUpdate(evt);
             }
+        });
+        tfInTemp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tfInTempMouseEntered(evt);
+            }
+        });
+        tfInTemp.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tfInTempKeyReleased(evt);
             }
@@ -167,142 +179,76 @@ public class TemperatureConverter extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void convert(){
+         int inTemp = 0;
+        if (tfInTemp.getText().equals("")) {
+            lblOut.setText("Please enter a temperature.");
+        } else {
+            try {
+                inTemp = Integer.parseInt(tfInTemp.getText());
+            } catch (NumberFormatException e1) {
+                lblOut.setText("Enter a valid number for the temp.");
+                inTemp = 0;
+                return;
+            }
+        }
+        if(!(btnFromCelcius.isSelected() || btnFromFahrenheit.isSelected() || btnFromKelvin.isSelected()) || !(btnToCelcius.isSelected() || btnToFahrenheit.isSelected() || btnToKelvin.isSelected())){
+            lblOut.setText("Please select a to and from conversion temp");
+            return;
+        }
+        
+        if (btnFromCelcius.isSelected()) {
+            if (btnToCelcius.isSelected()) {
+                lblOut.setText(String.valueOf(inTemp));
+            } else if (btnToFahrenheit.isSelected()) {
+                lblOut.setText(String.valueOf(1.8*inTemp + 32));
+            } else if (btnToKelvin.isSelected()) {
+                lblOut.setText(String.valueOf(inTemp + 273.15));
+            }
+        } else if (btnFromFahrenheit.isSelected()) {
+            if (btnToCelcius.isSelected()) {
+                lblOut.setText(String.valueOf((inTemp-32)/1.8));
+            } else if (btnToFahrenheit.isSelected()) {
+                lblOut.setText(String.valueOf(inTemp));
+            } else if (btnToKelvin.isSelected()) {
+                lblOut.setText(String.valueOf((inTemp - 32) * 5/9 + 273.15));
+            }
+        } else if (btnFromKelvin.isSelected()) {
+            if (btnToCelcius.isSelected()) {
+                lblOut.setText(String.valueOf(inTemp - 273.15));
+            } else if (btnToFahrenheit.isSelected()) {
+                lblOut.setText(String.valueOf((inTemp- 273.15) * 9/5 + 32));
+            } else if (btnToKelvin.isSelected()) {
+                lblOut.setText(String.valueOf(inTemp));
+            }
+        }
+
+    }
     private void tfInTempKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInTempKeyTyped
         // TODO add your handling code here:
-        int inTemp = 0;
-        if (tfInTemp.getText().equals("")) {
-            lblOut.setText("Please enter a temperature.");
-        } else {
-            try {
-                inTemp = Integer.parseInt(tfInTemp.getText());
-            } catch (NumberFormatException e1) {
-                lblOut.setText("Enter a valid number for the temp.");
-                inTemp = 0;
-                return;
-            }
-        }
-        if(!(btnFromCelcius.isSelected() || btnFromFahrenheit.isSelected() || btnFromKelvin.isSelected()) || !(btnToCelcius.isSelected() || btnToFahrenheit.isSelected() || btnToKelvin.isSelected())){
-            lblOut.setText("Please select a to and from conversion temp");
-            return;
-        }
-        
-        if (btnFromCelcius.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf(1.8*inTemp + 32));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp + 273.15));
-            }
-        } else if (btnFromFahrenheit.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp-32)/1.8));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp - 32) * 5/9 + 273.15));
-            }
-        } else if (btnFromKelvin.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp - 273.15));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp- 273.15) * 9/5 + 32));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            }
-        }
-
+       
     }//GEN-LAST:event_tfInTempKeyTyped
-/*
-    private void tfInTempKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInTempKeyPressed
-        int inTemp = 0;
-        if (tfInTemp.getText().equals("")) {
-            lblOut.setText("Please enter a temperature.");
-        } else {
-            try {
-                inTemp = Integer.parseInt(tfInTemp.getText());
-            } catch (NumberFormatException e1) {
-                lblOut.setText("Enter a valid number for the temp.");
-                return;
-            }
-        }
-        if(!(btnFromCelcius.isSelected() || btnFromFahrenheit.isSelected() || btnFromKelvin.isSelected()) || !(btnToCelcius.isSelected() || btnToFahrenheit.isSelected() || btnToKelvin.isSelected())){
-            lblOut.setText("Please select a to and from conversion temp");
-            return;
-        }
-        
-        if (btnFromCelcius.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf(1.8*inTemp + 32));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp + 273.15));
-            }
-        } else if (btnFromFahrenheit.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp-32)/1.8));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp - 32) * 5/9 + 273.15));
-            }
-        } else if (btnFromKelvin.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp - 273.15));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp- 273.15) * 9/5 + 32));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            }
-        }
-    }//GEN-LAST:event_tfInTempKeyPressed
 
     private void tfInTempKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfInTempKeyReleased
-        int inTemp = 0;
-        if (tfInTemp.getText().equals("")) {
-            lblOut.setText("Please enter a temperature.");
-        } else {
-            try {
-                inTemp = Integer.parseInt(tfInTemp.getText());
-            } catch (NumberFormatException e1) {
-                lblOut.setText("Enter a valid number for the temp.");
-                inTemp = 0;
-                return;
-            }
-        }
-        if(!(btnFromCelcius.isSelected() || btnFromFahrenheit.isSelected() || btnFromKelvin.isSelected()) || !(btnToCelcius.isSelected() || btnToFahrenheit.isSelected() || btnToKelvin.isSelected())){
-            lblOut.setText("Please select a to and from conversion temp");
-            return;
-        }
-        
-        if (btnFromCelcius.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf(1.8*inTemp + 32));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp + 273.15));
-            }
-        } else if (btnFromFahrenheit.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp-32)/1.8));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp - 32) * 5/9 + 273.15));
-            }
-        } else if (btnFromKelvin.isSelected()) {
-            if (btnToCelcius.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp - 273.15));
-            } else if (btnToFahrenheit.isSelected()) {
-                lblOut.setText(String.valueOf((inTemp- 273.15) * 9/5 + 32));
-            } else if (btnToKelvin.isSelected()) {
-                lblOut.setText(String.valueOf(inTemp));
-            }
-        }
+        // TODO add your handling code here:
+//        convert();
     }//GEN-LAST:event_tfInTempKeyReleased
-*/
+
+    private void tfInTempMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tfInTempMouseEntered
+        // TODO add your handling code here:
+//        convert();
+    }//GEN-LAST:event_tfInTempMouseEntered
+
+    private void tfInTempCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tfInTempCaretUpdate
+        // TODO add your handling code here:
+        convert();
+    }//GEN-LAST:event_tfInTempCaretUpdate
+
+    private void btnFromCelciusStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_btnFromCelciusStateChanged
+        // TODO add your handling code here:
+        convert();
+    }//GEN-LAST:event_btnFromCelciusStateChanged
+/**/
 
     /**
      * @param args the command line arguments

@@ -19,6 +19,7 @@ public class Writer {
             out.print(name);
             out.print(' ');
             out.println(score);
+            out.print(name);
             out.close();
 
         }catch(IOException ex){

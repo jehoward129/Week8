@@ -15,8 +15,9 @@ public class ReadFile {
         File file = new File("demo.txt");
         try{
             Scanner scanner = new Scanner(file);
-            while(scanner.hasNext()){
-                System.out.println(scanner.nextLine());
+            while(scanner.hasNextLine()){
+                int subNum = Integer.parseInt(scanner.nextLine());
+                
             }
         }catch(FileNotFoundException ex){
             ex.printStackTrace();
